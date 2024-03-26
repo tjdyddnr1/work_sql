@@ -378,9 +378,228 @@ SELECT SYSDATE,
 FROM DUAL;
 
 
+-- 돌아오는 요일(NEXT_DAY), 달의 마지막 날짜를 구하는 LAST_DAY
+
+SELECT SYSDATE,
+	NEXT_DAY(SYSDATE,'월요일'),
+	LAST_DAY(SYSDATE)
+FROM DUAL;
 
 
+-- 날짜 정보 추출 함수
+
+SELECT EXTRACT(YEAR FROM DATE '2024-03-26')
+FROM DUAL;
+
+SELECT * 
+FROM EMP
+WHERE EXTRACT (MONTH FROM hiredate) = 12;
+
+-- 자료형을 변환하는 형 변환 함수
+
+SELECT empno, ename, empno + '500'
+FROM emp
+WHERE ENAME = 'FORD';
+
+-- 날짜, 숫자를 문자로 변환하는 TO_CHAR 함수
+SELECT SYSDATE FROM DUAL;
+-- 원하는 format으로 바꿔서 찍어준다.
+SELECT TO_CHAR(SYSDATE, 'YYYY/MM/DD HH24:MI:SS') AS "현재날짜시간"
+FROM DUAL;
+
+SELECT SYSDATE,
+    TO_CHAR(SYSDATE, 'CC') AS 세기,
+    TO_CHAR(SYSDATE, 'YY') AS 연도,
+    TO_CHAR(SYSDATE, 'YYYY/MM/DD PM HH:MI:SS ') AS "년/월/일 시:분:초",
+    TO_CHAR(SYSDATE, 'Q') AS 쿼터,
+    TO_CHAR(SYSDATE, 'DD') AS 일,
+    TO_CHAR(SYSDATE, 'DDD') AS 경과일,
+    TO_CHAR(SYSDATE, 'HH') AS "12시간제",
+    TO_CHAR(SYSDATE, 'HH12') AS "12시간제",
+    TO_CHAR(SYSDATE, 'HH24') AS "24시간제",
+    TO_CHAR(SYSDATE, 'W') AS 몇주차
+FROM DUAL;
+
+SELECT SYSDATE,
+     TO_CHAR(SYSDATE, 'MM') AS MM,
+     TO_CHAR(SYSDATE, 'MON', 'NLS_DATE_LANGUAGE = KOREAN' ) AS MON_KOR,
+     TO_CHAR(SYSDATE, 'MON', 'NLS_DATE_LANGUAGE = JAPANESE') AS MON_JPN,
+     TO_CHAR(SYSDATE, 'MON', 'NLS_DATE_LANGUAGE = ENGLISH' ) AS MON_ENG,
+     TO_CHAR(SYSDATE, 'MONTH', 'NLS_DATE_LANGUAGE = KOREAN' ) AS MONTH_KOR,
+     TO_CHAR(SYSDATE, 'MONTH', 'NLS_DATE_LANGUAGE = JAPANESE') AS MONTH_JPN,
+     TO_CHAR(SYSDATE, 'MONTH', 'NLS_DATE_LANGUAGE = ENGLISH' ) AS MONTH_ENG
+FROM DUAL;
+
+SELECT SYSDATE,
+     TO_CHAR(SYSDATE, 'MM') AS MM,
+     TO_CHAR(SYSDATE, 'DD') AS DD,
+     TO_CHAR(SYSDATE, 'DY', 'NLS_DATE_LANGUAGE = KOREAN' ) AS DY_KOR,
+     TO_CHAR(SYSDATE, 'DY', 'NLS_DATE_LANGUAGE = JAPANESE') AS DY_JPN,
+     TO_CHAR(SYSDATE, 'DY', 'NLS_DATE_LANGUAGE = ENGLISH' ) AS DY_ENG,
+     TO_CHAR(SYSDATE, 'DAY', 'NLS_DATE_LANGUAGE = KOREAN' ) AS DAY_KOR,
+     TO_CHAR(SYSDATE, 'DAY', 'NLS_DATE_LANGUAGE = JAPANESE') AS DAY_JPN,
+     TO_CHAR(SYSDATE, 'DAY', 'NLS_DATE_LANGUAGE = ENGLISH' ) AS DAY_ENG
+FROM DUAL;
+
+SELECT SYSDATE,
+     TO_CHAR(SYSDATE, 'HH24:MI:SS') AS HH24MISS,
+     TO_CHAR(SYSDATE, 'HH12:MI:SS AM') AS HHMISS_AM,
+     TO_CHAR(SYSDATE, 'HH:MI:SS P.M.') AS HHMISS_PM
+FROM DUAL;
+
+--숫자 데이터 형식을 지정하여 출력하기
+SELECT SAL,
+     TO_CHAR(SAL, '$999,999') AS SAL_$,
+     TO_CHAR(SAL, 'L999,999') AS SAL_L,
+     TO_CHAR(SAL, '999,999.00') AS SAL_1,
+     TO_CHAR(SAL, '000,999,999.00') AS SAL_2,
+     TO_CHAR(SAL, '000999999.99') AS SAL_3,
+     TO_CHAR(SAL, '999,999,00') AS SAL_4
+FROM EMP;
+
+SELECT '1300' - '1200' FROM DUAL; -- 자동 형변환
+SELECT TO_NUMBER('1300') - '1000' FROM DUAL; --수동 형변환
+
+-- TO_DATE :문자열로 명시된 날짜로 변환하는 함수
+SELECT TO_DATE('22/08/20', 'YY/MM/DD')
+FROM DUAL;
 
 
+-- NULL 처리 함수 : NULL이란? 특정열의 행의 데이터값이 지정되지 않으면 데이터값이 NULL이 됨
+-- NULL은 0이나 공백과는 다른 의미, 연산도 안되고 비교도 안됨
+
+-- NVL(컬럼명,반환값) = 입력값이 NULL인 경우 반환값으로 변환
+
+SELECT EMPNO, ENAME, SAL, COMM, SAL+COMM, 
+	NVL(COMM, 0),
+	SAL + NVL(COMM, 0)
+	FROM EMP;
+	
+
+-- NVL2(컬럼명,반환값(NULL이 아니면),반환값2(NULL인 경우)) 입력 데이터가 NULL이 아니면 2번째 값으로 반환, NULL이면 3번째 값으로 반환
+
+SELECT EMPNO, ENAME, COMM,
+	NVL2(COMM, '0', 'X'),
+	NVL2(COMM, SAL*12+COMM, SAL*12) 연봉
+FROM EMP;
+
+-- NULLIF(비교값1, 비교값2) : 두 값을 비교하여 동일한지 아닌지에 대한 결과 반환,
+-- 두 값이 동일하면 NULL 반환하고 동일하지 않으면 첫 번째 값 반환
+SELECT NULLIF(10,10), NULLIF ('A','B')
+FROM DUAL;
 
 
+-- 1. **EMP테이블에서 COMM 의 값이 NULL이 아닌 정보 조회**
+
+SELECT *
+FROM EMP
+WHERE COMM IS NOT NULL;
+
+-- 2. **EMP테이블에서 커미션을 받지 못하는 직원 조회**
+
+SELECT *
+FROM EMP
+WHERE COMM IS NULL;
+
+-- 3. **EMP테이블에서 관리자가 없는 직원 정보 조회**
+
+SELECT *
+FROM EMP
+WHERE MGR IS NULL;
+
+-- 4. **EMP테이블에서 급여를 많이 받는 직원 순으로 조회**
+SELECT *
+FROM EMP
+ORDER BY SAL DESC;
+
+-- 5. **EMP테이블에서 급여가 같을 경우 커미션을 내림차순 정렬 조회**
+
+SELECT *
+FROM EMP
+ORDER BY SAL DESC, COMM DESC;
+
+-- 6. **EMP테이블에서 사원번호, 사원명,직급, 입사일 조회 (단, 입사일을 오름차순 정렬 처리)**
+
+SELECT EMPNO, ENAME, JOB, HIREDATE
+FROM EMP
+ORDER BY HIREDATE;
+
+-- 7. **EMP테이블에서 사원번호, 사원명 조회 (사원번호 기준 내림차순 정렬)**
+
+SELECT EMPNO, ENAME
+FROM EMP
+ORDER BY EMPNO DESC;
+
+-- 8. **EMP테이블에서 사번, 입사일, 사원명, 급여 조회  (부서번호가 빠른 순으로, 같은 부서번호일 때는 최근 입사일 순으로 처리)**
+
+SELECT EMPNO, HIREDATE, ENAME, SAL 
+FROM EMP
+ORDER BY EMPNO, HIREDATE;
+
+-- 9. **오늘 날짜에 대한 정보 조회**
+
+SELECT SYSDATE 
+FROM DUAL;
+
+-- 10. **EMP테이블에서 사번, 사원명, 급여 조회  (단, 급여는 100단위까지의 값만 출력 처리하고 급여 기준 내림차순 정렬)**
+
+SELECT EMPNO, ENAME, ROUND(SAL, -2)
+FROM EMP
+ORDER BY SAL DESC;
+
+-- 11. **EMP테이블에서 사원번호가 홀수인 사원들을 조회**
+
+SELECT *
+FROM EMP
+WHERE MOD(EMPNO ,2) > 0
+
+-- -- 12. **EMP테이블에서 사원명, 입사일 조회 (단, 입사일은 년도와 월을 분리 추출해서 출력)**
+
+SELECT ENAME, EXTRACT (MONTH FROM hiredate),EXTRACT (YEAR FROM HIREDATE)
+FROM EMP;
+
+-- 13. **EMP테이블에서 9월에 입사한 직원의 정보 조회**
+
+SELECT HIREDATE
+FROM EMP
+WHERE EXTRACT (MONTH FROM HIREDATE) = 9;
+
+-- 14. **EMP테이블에서 81년도에 입사한 직원 조회**
+
+SELECT HIREDATE
+FROM EMP
+WHERE EXTRACT (YEAR FROM HIREDATE) = 1981;
+
+-- 15. **EMP테이블에서 이름이 'E'로 끝나는 직원 조회**
+
+SELECT *
+FROM EMP
+WHERE ENAME LIKE '%E'
+
+-- 16. **EMP테이블에서 이름의 세 번째 글자가 'R'인 직원의 정보 조회**
+
+SELECT *
+FROM EMP
+WHERE ENAME LIKE '__R%'
+
+-- - **LIKE 사용**
+
+-- 1. **EMP테이블에서 사번, 사원명, 입사일, 입사일로부터 40년 되는 날짜 조회**
+
+SELECT EMPNO, ENAME, HIREDATE, ADD_MONTHS(HIREDATE,480)  
+FROM EMP;
+
+-- 2. **EMP테이블에서 입사일로부터 38년 이상 근무한 직원의 정보 조회**
+
+SELECT *
+FROM EMP
+WHERE MONTHS_BETWEEN(SYSDATE, HIREDATE)/12 >= 38; 
+
+-- 3. **오늘 날짜에서 년도만 추출**
+
+SELECT TO_CHAR(SYSDATE, 'YY')
+FROM DUAL;
+	
+	
+	
+	
