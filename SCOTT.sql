@@ -744,29 +744,244 @@ WHERE JOB = 'MANAGER';
 
 -- 조인(JOIN) : 두 개 이상의 테이블에서 데이터를 가져와서 연결하는데 사용되는 SQL 기능
 -- 테이블에 대한 식별 값인 Primary Key, 테이블 간의 공통 값인, Foreign Key값을 사용하여 조인
-SELECT EMPNO, ENAME, MGR, e.DEPTNO 
+
+-- 내부 조인(동등 조인, inner join)이며 오라클 방식, 양쪽에 동일한 컬럼이 있는 경우 테이블 이름을 표시해야 함
+SELECT EMPNO, ENAME, MGR, SAL, e.DEPTNO
 FROM EMP e, DEPT d
 WHERE e.DEPTNO = d.DEPTNO
+AND SAL >= 3000;
+
+
+-- ANSI 방식
+SELECT EMPNO, ENAME, MGR, E.DEPTNO
+FROM EMP E JOIN DEPT D
+ON E.DEPTNO = D.DEPTNO;
+WHERE SAL >= 3000;
+
+
+-- 연습 문제 : EMP 테이블 별칭을 E로, DEPT 테이블 별칭은 D로 하여 다음과 같은 등가 조인을 했을 때,
+-- 급여가 2500 이하이고, 사원 번호가 9999 이하인 사원의 정보가 출력되도록 작성
+SELECT E.EMPNO, E.ENAME, D.DEPTNO, D.LOC
+FROM EMP E JOIN DEPT D
+ON E.DEPTNO = D.DEPTNO 
+WHERE SAL <= 2500 AND EMPNO <= 9999
 ORDER BY EMPNO;
 
 
+-- 비등가 조인 : 동일한 컬럼이 없을 때 사용하는 조인(일반적으로 많이 사용되지는 않음.)
+SELECT *
+FROM EMP;
+
+SELECT *
+FROM SALGRADE;
+
+SELECT E.ENAME, E.SAL, S.GRADE
+FROM EMP E JOIN SALGRADE s 
+ON E.SAL BETWEEN S. LOSAL AND S.HISAL;
+
+
+-- 자체 조인 : 현재 테이블 조인해서 어떠한 결과를 찾아낼 때  사용
+SELECT E1.EMPNO, E1.ENAME, E1.MGR, E2.EMPNO AS "상관 사원 번호", E2.ENAME AS "상관 이름"
+FROM EMP E1 JOIN EMP E2
+ON E1.MGR = E2.EMPNO;
+
+-- 외부 조인 : (LEFT OUTTER JOIN) : 부족한 부분이 있는 행이 있는 테이블에 (+)
+SELECT E.ENAME, E.DEPTNO, D.DNAME
+FROM EMP E, DEPT D
+WHERE E.DEPTNO = D.DEPTNO(+)
+ORDER BY E.DEPTNO ;
+
+
+SELECT E.ENAME, E.DEPTNO, D.DNAME
+FROM EMP E RIGHT OUTER JOIN DEPT D
+ON E.DEPTNO = D.DEPTNO
+ORDER BY E.DEPTNO;
+
+SELECT E.ENAME, E.DEPTNO, D.DNAME
+FROM EMP E FULL OUTER JOIN DEPT D
+ON E.DEPTNO = D.DEPTNO
+ORDER BY E.DEPTNO;
+
+
+-- NATURAL JOIN : 동등조인을 사용하는 다른 방법, 조건절 없이 사용, 두 테이블의 같은 열을  자동으로  연결
+SELECT E.EMPNO, E.ENAME, D.DNAME, DEPTNO
+FROM EMP E NATURAL JOIN DEPT D;
+
+
+-- JOIN ~ USING : 동등조인(등가조인)을 대신하는 방식 중의 하나
+SELECT E.EMPNO, E.ENAME, D.DNAME, DEPTNO
+FROM EMP E JOIN DEPT D USING(DEPTNO)
+WHERE SAL >= 3000
+ORDER BY DEPTNO, E.EMPNO;
+
+
+-- 연습문제 1 : 급여가 2000 초과인 사원들의 부서 정보, 사원 정보 출력 (SQL-99 방식)
+SELECT DEPTNO, DNAME, EMPNO, ENAME, SAL
+FROM EMP NATURAL JOIN DEPT
+WHERE SAL > 2000;
+
+
+-- 연습문제 2 : 부서별 평균, 최대 급여, 최소 급여, 사원 수 출력 (ANSI JOIN)
+SELECT D.DEPTNO,	
+DNAME,
+ROUND(AVG(SAL)) AS "평균 급여",
+MAX(SAL) AS "최대 급여",
+MIN(SAL) AS "최소 급여",
+COUNT(*) AS "사원 수"
+FROM EMP E JOIN DEPT D
+ON E.DEPTNO = D.DEPTNO
+GROUP BY D.DEPTNO, D.DNAME;
+
+
+-- 연습문제 3 : 모든 부서 정보와 사원 정보를 부서 번호, 사원 이름 순으로 정렬해서 출력
+SELECT D.DEPTNO, D.DNAME, E.EMPNO, E.ENAME, E.JOB, E.SAL
+FROM EMP E RIGHT OUTER JOIN DEPT D
+ON E.DEPTNO = D.DEPTNO 
+ORDER BY D.DEPTNO, E.ENAME;
+
+
+-- 1. 사원번호가 7499인 사원의 이름, 입사일 부서번호 출력
+SELECT ENAME, TO_CHAR(HIREDATE, 'YY/MM/DD'), DEPTNO
+FROM EMP 
+WHERE EMPNO = '7499';
+
+
+-- 2. 이름이 ALLEN인 사원의 모든 정보 출력
+SELECT *
+FROM EMP
+WHERE ENAME = 'ALLEN';
+
+-- 3. 이름이 K보다 큰 글자로 시작하는 사원의 모든 정보 출력
+SELECT *
+FROM EMP
+WHERE ENAME > 'K%';
+
+
+-- 4. 입사일이 81년 4월2일 보다 늦고, 82년 12월9일 보다 빠른 사원의 이름, 급여, 부서번호 출력
+SELECT ENAME, SAL, DEPTNO,TO_CHAR(HIREDATE, 'YY/MM/DD')
+FROM EMP
+WHERE HIREDATE BETWEEN '1981-04-03' AND '1982-12-08';
+
+
+-- 5. 급여가 1,600 보다 크고, 3000보다 작은 사원의 이름, 직무, 급여를 출력
+SELECT ENAME, JOB, SAL
+FROM EMP
+WHERE SAL BETWEEN '1601' AND '2999'
+
+
+-- 6. 입사일이 81년 이외에 입사한 사원의 모든 정보 출력
+SELECT *
+FROM EMP
+WHERE  TO_CHAR(HIREDATE,'YY') NOT IN '81';
+
+
+-- 7. 직업이 MANAGER와 SALESMAN인 사원의 모든 정보를 출력
+SELECT *
+FROM EMP
+WHERE JOB IN ('MANAGER', 'SALESMAN');
+
+
+-- 8. 부서가 20번, 30번을 제외한 모든 사원의 이름, 사원번호, 부서번호를 출력
+SELECT ENAME, EMPNO, DEPTNO
+FROM EMP
+WHERE DEPTNO NOT IN ('20','30');
+
+
+-- 9. 이름이 S로 시작하는 사원의 사원번호, 이름, 부서번호 출력
+SELECT EMPNO, ENAME, DEPTNO
+FROM EMP
+WHERE ENAME LIKE 'S%';
+
+
+-- 10. 처음 글자는 관계없고, 두 번째 글자가 A인 사원의 모든 정보를 출력
+SELECT *
+FROM EMP
+WHERE ENAME LIKE '_A%';
+
+
+-- 11. 커미션이 NULL이 아닌 사원의 모든 정보를 출력
+SELECT *
+FROM EMP
+WHERE COMM IS NOT NULL;
 
 
 
+-- 12. 이름이 J자로 시작하고 마지막 글자가 S인 사원의 모든 정보를 출력
+SELECT *
+FROM EMP
+WHERE ENAME LIKE 'J%S';
+
+
+-- 1. 급여가 1500이상이고, 부서번호가 30번인 사원 중 직무가 MANAGER인 사원의 모든 정보 출력s
+SELECT *
+FROM EMP
+WHERE SAL >= 1500 AND DEPTNO = 30 AND JOB = 'MANAGER';
+
+
+-- 1. 모든 사원의 이름, 급여, 커미션, 총액(급여+커미션)을 구하여 총액이 많은 순서로 출력 (단, 커미션이 null인 사원도 0으로 포함)
+SELECT ENAME, SAL, NVL(COMM,'0') "COMM", SAL + NVL(COMM, '0') "총액"
+FROM EMP
+ORDER BY "총액";
+
+
+-- 1. 10번 부서의 모든 사원에게 급여의 13%를 보너스로 지불하기로 하였다. 10번 부서 사원들의 이름, 급여, 보너스, 부서번호 출력
+
+
+-- 1. 모든 사원에 대해 입사한 날로 부터 60일이 지난 후의 ‘월요일’에 대한 년,월,일를 구하여 이름, 입사일, 60일 후의 ‘월요일’ 날짜를 출력
+
+
+-- 1. 이름의 글자수가 6자 이상인 사원의 이름을 앞에서 3자만 구하여 소문자로 이름만 출력
 
 
 
+-- 1. 사원들의 사원 번호와 급여, 커미션, 연봉((comm+sal)*12)을 연봉이 많은 순서로 출력
 
 
 
+-- 1. 모든 사원들의 입사한 년/월/일 
+(예, 1981년5월30일)
 
 
 
+-- 1. 10번 부서에 대해 급여의 평균 값, 최대 값, 최소 값, 인원 수를 출력
 
 
 
+-- 1. 사원번호가 짝수인 사원들의 모든 정보를 출력
 
 
+
+-- 22. 각 부서별 같은 직무를 갖는 사원의 인원수를 구하여 부서 번호, 직무, 인원수 출력
+
+
+
+-- 1. EMP와 DEPT테이블을 조인하여 모든 사원에 대해 부서 번호, 부서이름, 사원이름 급여를 출력
+
+
+
+-- 1. 이름이 ‘ALLEN’인 사원의 부서 번호, 부서 이름, 사원 이름, 급여 출력
+
+
+
+-- 1. ‘ALLEN’과 직무가 같은 사원의 이름, 부서 이름, 급여, 부서위치를 출력
+
+
+
+-- 1. 모든 사원들의 평균 급여 보다 많이 받는 사원들의 사원번호와 이름 출력
+
+
+
+-- 1. 부서별 평균 급여가 2000보다 적은 부서 사원들의 부서 번호 출력
+
+
+-- 1. 30번 부서의 최고급여보다 급여가 많은 사원의 사원 번호, 이름, 급여를 출력
+    
+    
+    
+-- 2. ‘FORD’와 부서가 같은 사원들의 이름, 부서 이름, 직무, 급여를 출력
+    
+    
+-- 3. 부서 이름이 ‘SALES’인 사원들의 평균 급여 보다 많고, 부서 이름이 ‘RESEARCH’인 사원들의 평균 급여 보다 적은 사원들의 이름, 부서번호, 급여, 직무 출력
 
 
 
