@@ -530,54 +530,48 @@ SELECT EMPNO, ENAME
 FROM EMP
 ORDER BY EMPNO DESC;
 
--- 8. **EMP테이블에서 사번, 입사일, 사원명, 급여 조회  (부서번호가 빠른 순으로, 같은 부서번호일 때는 최근 입사일 순으로 처리)**
+-- 8. **EMP테이블에서 사번, 입사일, 사원명, 급여 조회  
+-- (부서번호가 빠른 순으로, 같은 부서번호일 때는 최근 입사일 순으로 처리)**
 
 SELECT EMPNO, HIREDATE, ENAME, SAL 
 FROM EMP
 ORDER BY EMPNO, HIREDATE;
 
 -- 9. **오늘 날짜에 대한 정보 조회**
-
 SELECT SYSDATE 
 FROM DUAL;
 
--- 10. **EMP테이블에서 사번, 사원명, 급여 조회  (단, 급여는 100단위까지의 값만 출력 처리하고 급여 기준 내림차순 정렬)**
-
+-- 10. **EMP테이블에서 사번, 사원명, 급여 조회
+--(단, 급여는 100단위까지의 값만 출력 처리하고 급여 기준 내림차순 정렬)**
 SELECT EMPNO, ENAME, ROUND(SAL, -2)
 FROM EMP
 ORDER BY SAL DESC;
 
 -- 11. **EMP테이블에서 사원번호가 홀수인 사원들을 조회**
-
 SELECT *
 FROM EMP
 WHERE MOD(EMPNO ,2) > 0
 
 -- -- 12. **EMP테이블에서 사원명, 입사일 조회 (단, 입사일은 년도와 월을 분리 추출해서 출력)**
-
 SELECT ENAME, EXTRACT (MONTH FROM hiredate),EXTRACT (YEAR FROM HIREDATE)
 FROM EMP;
 
 -- 13. **EMP테이블에서 9월에 입사한 직원의 정보 조회**
-
 SELECT HIREDATE
 FROM EMP
 WHERE EXTRACT (MONTH FROM HIREDATE) = 9;
 
 -- 14. **EMP테이블에서 81년도에 입사한 직원 조회**
-
 SELECT HIREDATE
 FROM EMP
 WHERE EXTRACT (YEAR FROM HIREDATE) = 1981;
 
 -- 15. **EMP테이블에서 이름이 'E'로 끝나는 직원 조회**
-
 SELECT *
 FROM EMP
 WHERE ENAME LIKE '%E'
 
 -- 16. **EMP테이블에서 이름의 세 번째 글자가 'R'인 직원의 정보 조회**
-
 SELECT *
 FROM EMP
 WHERE ENAME LIKE '__R%'
@@ -585,21 +579,210 @@ WHERE ENAME LIKE '__R%'
 -- - **LIKE 사용**
 
 -- 1. **EMP테이블에서 사번, 사원명, 입사일, 입사일로부터 40년 되는 날짜 조회**
-
 SELECT EMPNO, ENAME, HIREDATE, ADD_MONTHS(HIREDATE,480)  
 FROM EMP;
 
--- 2. **EMP테이블에서 입사일로부터 38년 이상 근무한 직원의 정보 조회**
 
+-- 2. **EMP테이블에서 입사일로부터 38년 이상 근무한 직원의 정보 조회**
 SELECT *
 FROM EMP
 WHERE MONTHS_BETWEEN(SYSDATE, HIREDATE)/12 >= 38; 
 
 -- 3. **오늘 날짜에서 년도만 추출**
-
 SELECT TO_CHAR(SYSDATE, 'YY')
 FROM DUAL;
-	
+
+
+-- 다중행 함수 : 여러 행에 대해 함수가 적용 되어 하나의 결과를 나타내는 함수, 집계 함수라고 함
+SELECT SUM(SAL), EMPNO 
+FROM EMP;
+
+
+-- GROUP BY : 그룹으로 묶어줌
+SELECT DEPTNO, SUM(SAL)  -- 3. 부서의 급여의 합계를 출력
+FROM EMP  -- 1. 먼저 사원 테이블을 가져 옴
+GROUP BY DEPTNO;  -- 2. 사원 테이블을 부서 단위로 묶음
+
+
+-- 모든 사원의 급여와 수당의 합계 구하기
+
+SELECT SUM(SAL), SUM(COMM)
+FROM EMP;
+
+
+-- 테이블의 데이터 개수 출력
+SELECT COUNT(*)
+FROM EMP;
+
+
+--30번 부서의 사원 수 출력
+SELECT COUNT(*)
+FROM EMP
+WHERE DEPTNO  = 30;
+
+
+SELECT COUNT(COMM)
+FROM EMP
+WHERE COMM IS NOT NULL;
+
+
+-- 10번 부서의 사원 중 최대 급여 출력하기
+SELECT MAX(SAL)
+FROM EMP
+WHERE DEPTNO = 10;
+
+
+-- 30번 부서의 평균 급여 출력하기
+SELECT AVG(SAL)
+FROM EMP
+WHERE DEPTNO = 30;
+
+
+SELECT e.ENAME, e.SAL
+FROM EMP e
+WHERE e.DEPTNO = 10
+AND e.SAL = (SELECT MAX(SAL) FROM EMP WHERE DEPTNO  = 10);
+
+
+-- 부서별 평균 급여
+SELECT AVG(SAL), DEPTNO 
+FROM EMP
+GROUP BY DEPTNO;
+
+
+-- 집합을 사용해서 출력하기
+SELECT AVG(SAL) FROM EMP WHERE DEPTNO = 10
+UNION ALL 
+SELECT AVG(SAL) FROM EMP WHERE DEPTNO = 20
+UNION ALL
+SELECT AVG(SAL) FROM EMP WHERE DEPTNO = 30;
+
+
+-- 부서 번호 및 직책별 평균 급여 정렬하기
+SELECT DEPTNO, JOB, AVG(SAL)
+FROM EMP
+GROUP BY DEPTNO, JOB  
+ORDER BY DEPTNO, JOB;
+
+
+-- 부서 코드, 급여 합계, 평균급여, 부서 코드 순 정렬로 출력하기
+SELECT DEPTNO AS "부서코드", SUM(SAL) AS "급여 합계",
+ROUND(AVG(SAL)) AS "급여 평균", COUNT(*) AS "인원"
+FROM EMP
+GROUP BY DEPTNO
+ORDER BY DEPTNO;
+
+
+-- HAVING 절 : GROUP BY 절이 존재 할 때만 사용,
+-- GROUP BY로 절을 통해 그룹화 된 결과 값의 범위를 제한하는데 사용
+SELECT DEPTNO, JOB, AVG(SAL)
+FROM EMP
+WHERE DEPTNO = 10
+GROUP BY DEPTNO, JOB
+HAVING AVG(SAL) >= 2000
+ORDER BY DEPTNO, JOB;
+
+
+-- 연습문제 1 : HAVING절을 사용하여 부서별 직책의 평균 급여가 500 이상인 사원들의 부서번호,
+-- 직책, 부서별 직책의 평균 급여 출력
+SELECT DEPTNO, JOB, AVG(SAL)
+FROM EMP
+GROUP BY DEPTNO, JOB
+HAVING AVG(SAL) >= 500;
+
+
+-- 연습문제 2 : 부서번호, 평균급여, 최고급여, 최저급여, 사원수 출력, 
+-- 단, 평균 급여는 소수점 제외하고 부서 번호별 출력
+SELECT DEPTNO, FLOOR(AVG(SAL)), MAX(SAL), MIN(SAL), COUNT(*)
+FROM EMP
+GROUP BY DEPTNO;
+
+
+-- 연습문제 3 : 같은 직책의 종사하는 사원이 3명 이상인 직책과 인원을 출력
+SELECT JOB, COUNT(*)
+FROM EMP
+GROUP BY JOB
+HAVING COUNT(*) >= 3;
+
+
+-- 연습문제 4 : 사원들의 입사 연도 기준으로 부서별로 몇 명이 입사했는지 출력
+SELECT EXTRACT(YEAR FROM HIREDATE), DEPTNO, COUNT(*)
+FROM EMP
+GROUP BY EXTRACT(YEAR FROM HIREDATE), DEPTNO
+ORDER BY DEPTNO;
+
+
+-- 연습문제 5 : 추가 수당을 받는 사원과 받지 않은 사원수 출력, 추가 수당 여부는 O, X로 표기
+SELECT NVL2(COMM, 'O', 'X') "추가수당 여부", COUNT(*)
+FROM EMP
+GROUP BY NVL2(COMM, 'O', 'X')
+ORDER BY "추가수당 여부";
+
+
+-- 연습문제 6 : 각 부서의 입사년도별 사원 수, 최고 급여, 급여 합, 평균 급여를 출력
+SELECT DEPTNO "부서 번호", TO_CHAR(HIREDATE, 'YYYY') "입사 년도",
+COUNT(*) "사원 수", MAX(SAL) "최고 급여", SUM(SAL) "급여 합계", ROUND(AVG(SAL)) "평균 급여"
+FROM EMP
+GROUP BY DEPTNO, TO_CHAR(HIREDATE, 'YYYY')
+ORDER BY "부서 번호", "입사 년도";
+
+-- ROLLUP 함수 : 
+SELECT DEPTNO, JOB, COUNT(*), MAX(SAL), SUM(SAL), AVG(SAL)
+FROM EMP
+GROUP BY ROLLUP(DEPTNO, JOB);
+
+
+-- 집합연산자 : 두 개 이상의 쿼리 결과를 하나로 결합하는 연산자(수직적 처리)
+SELECT EMPNO, ENAME, JOB
+FROM EMP
+WHERE JOB = 'SALESMAN'
+UNION 
+SELECT EMPNO, ENAME, JOB 
+FROM EMP
+WHERE JOB = 'MANAGER';
+
+
+-- 조인(JOIN) : 두 개 이상의 테이블에서 데이터를 가져와서 연결하는데 사용되는 SQL 기능
+-- 테이블에 대한 식별 값인 Primary Key, 테이블 간의 공통 값인, Foreign Key값을 사용하여 조인
+SELECT EMPNO, ENAME, MGR, e.DEPTNO 
+FROM EMP e, DEPT d
+WHERE e.DEPTNO = d.DEPTNO
+ORDER BY EMPNO;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	
 	
 	
