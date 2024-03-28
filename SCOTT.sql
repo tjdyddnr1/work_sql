@@ -912,42 +912,41 @@ FROM EMP
 WHERE ENAME LIKE 'J%S';
 
 
--- 1. 급여가 1500이상이고, 부서번호가 30번인 사원 중 직무가 MANAGER인 사원의 모든 정보 출력s
+-- 13. 급여가 1500이상이고, 부서번호가 30번인 사원 중 직무가 MANAGER인 사원의 모든 정보 출력s
 SELECT *
 FROM EMP
 WHERE SAL >= 1500 AND DEPTNO = 30 AND JOB = 'MANAGER';
 
 
--- 1. 모든 사원의 이름, 급여, 커미션, 총액(급여+커미션)을 구하여 총액이 많은 순서로 출력 (단, 커미션이 null인 사원도 0으로 포함)
+-- 14. 모든 사원의 이름, 급여, 커미션, 총액(급여+커미션)을 구하여 총액이 많은 순서로 출력 (단, 커미션이 null인 사원도 0으로 포함)
 SELECT ENAME, SAL, NVL(COMM,'0') "COMM", SAL + NVL(COMM, '0') "총액"
 FROM EMP
 ORDER BY "총액";
 
 
--- 1. 10번 부서의 모든 사원에게 급여의 13%를 보너스로 지불하기로 하였다. 10번 부서 사원들의 이름, 급여, 보너스, 부서번호 출력
+-- 15. 10번 부서의 모든 사원에게 급여의 13%를 보너스로 지불하기로 하였다. 10번 부서 사원들의 이름, 급여, 보너스, 부서번호 출력
 
 
--- 1. 모든 사원에 대해 입사한 날로 부터 60일이 지난 후의 ‘월요일’에 대한 년,월,일를 구하여 이름, 입사일, 60일 후의 ‘월요일’ 날짜를 출력
+-- 16. 모든 사원에 대해 입사한 날로 부터 60일이 지난 후의 ‘월요일’에 대한 년,월,일를 구하여 이름, 입사일, 60일 후의 ‘월요일’ 날짜를 출력
 
 
--- 1. 이름의 글자수가 6자 이상인 사원의 이름을 앞에서 3자만 구하여 소문자로 이름만 출력
-
-
-
--- 1. 사원들의 사원 번호와 급여, 커미션, 연봉((comm+sal)*12)을 연봉이 많은 순서로 출력
+-- 17. 이름의 글자수가 6자 이상인 사원의 이름을 앞에서 3자만 구하여 소문자로 이름만 출력
 
 
 
--- 1. 모든 사원들의 입사한 년/월/일 
-(예, 1981년5월30일)
+-- 18. 사원들의 사원 번호와 급여, 커미션, 연봉((comm+sal)*12)을 연봉이 많은 순서로 출력
 
 
 
--- 1. 10번 부서에 대해 급여의 평균 값, 최대 값, 최소 값, 인원 수를 출력
+-- 19. 모든 사원들의 입사한 년/월/일 (예, 1981년5월30일)
 
 
 
--- 1. 사원번호가 짝수인 사원들의 모든 정보를 출력
+-- 20. 10번 부서에 대해 급여의 평균 값, 최대 값, 최소 값, 인원 수를 출력
+
+
+
+-- 21. 사원번호가 짝수인 사원들의 모든 정보를 출력
 
 
 
@@ -955,49 +954,261 @@ ORDER BY "총액";
 
 
 
--- 1. EMP와 DEPT테이블을 조인하여 모든 사원에 대해 부서 번호, 부서이름, 사원이름 급여를 출력
+-- 23. EMP와 DEPT테이블을 조인하여 모든 사원에 대해 부서 번호, 부서이름, 사원이름 급여를 출력
 
 
 
--- 1. 이름이 ‘ALLEN’인 사원의 부서 번호, 부서 이름, 사원 이름, 급여 출력
+-- 24. 이름이 ‘ALLEN’인 사원의 부서 번호, 부서 이름, 사원 이름, 급여 출력
 
 
 
--- 1. ‘ALLEN’과 직무가 같은 사원의 이름, 부서 이름, 급여, 부서위치를 출력
+-- 25. ‘ALLEN’과 직무가 같은 사원의 이름, 부서 이름, 급여, 부서위치를 출력
 
 
 
--- 1. 모든 사원들의 평균 급여 보다 많이 받는 사원들의 사원번호와 이름 출력
+-- 26. 모든 사원들의 평균 급여 보다 많이 받는 사원들의 사원번호와 이름 출력
 
 
 
--- 1. 부서별 평균 급여가 2000보다 적은 부서 사원들의 부서 번호 출력
+-- 27. 부서별 평균 급여가 2000보다 적은 부서 사원들의 부서 번호 출력
 
 
--- 1. 30번 부서의 최고급여보다 급여가 많은 사원의 사원 번호, 이름, 급여를 출력
+-- 28. 30번 부서의 최고급여보다 급여가 많은 사원의 사원 번호, 이름, 급여를 출력
     
     
     
--- 2. ‘FORD’와 부서가 같은 사원들의 이름, 부서 이름, 직무, 급여를 출력
+-- 29. ‘FORD’와 부서가 같은 사원들의 이름, 부서 이름, 직무, 급여를 출력
     
     
--- 3. 부서 이름이 ‘SALES’인 사원들의 평균 급여 보다 많고, 부서 이름이 ‘RESEARCH’인 사원들의 평균 급여 보다 적은 사원들의 이름, 부서번호, 급여, 직무 출력
+-- 30. 부서 이름이 ‘SALES’인 사원들의 평균 급여 보다 많고,
+-- 부서 이름이 ‘RESEARCH’인 사원들의 평균 급여 보다 적은 사원들의 이름, 부서번호, 급여, 직무 출력
+
+
+-- 서브쿼리 : 쿼리문 내에 포함 되는 쿼리문을 의미, 일반적으로 SELECT 문의 WHERE 절에서 사용
+-- 단일행 서브쿼리와 다중행 서브쿼리가 있음
+SELECT DNAME
+FROM DEPT
+WHERE DEPTNO = (SELECT DEPTNO
+							FROM EMP 
+							WHERE ENAME = 'KING');
+						
+SELECT * FROM EMP
+WHERE SAL > (SELECT SAL FROM EMP WHERE ENAME = 'JONES');
+
+-- 연습문제 : 서브쿼리를 사용하여 EMP 테이블의 사원 정보 중에서
+-- 사원 이름이 ALLEN인 사원의 추가 수당보다 많은 추가 수당을 받는 사원 정보를 구하도록 코드 작성
+SELECT *
+FROM EMP
+WHERE COMM > (SELECT COMM  FROM EMP WHERE ENAME = 'ALLEN');
+
+SELECT * FROM EMP 
+WHERE HIREDATE < (SELECT HIREDATE FROM EMP WHERE ENAME = 'JAMES');
+
+SELECT E.EMPNO, E.ENAME, E.JOB, E.SAL, D.DEPTNO, D.DNAME, D.LOC
+FROM EMP E JOIN DEPT D
+ON E.DEPTNO = D.DEPTNO
+WHERE E. DEPTNO = 20
+AND E.SAL > (SELECT AVG(SAL) FROM EMP);
+
+
+-- 실행 결과가 여러 개인 다중행 서브쿼리
+-- IN : 메인쿼리의 데이터가 서브쿼리의 결과 중 하나라도 일치한 데이터가 있으면 TRUE
+-- ANY, SOME : 메인 쿼리의 조건식을 만족하는 서브쿼리의 결과가 하나 이상이면 TRUE
+-- ALL : 메인 쿼리의 조건식을 서브쿼리의 결과 모두가 만족하면 TRUE
+-- EXISTS : 서브 쿼리의 결과가 존재하면 TRUE
+SELECT *
+FROM EMP
+WHERE SAL IN(SELECT MAX(SAL) FROM EMP GROUP BY DEPTNO);
+
+SELECT EMPNO, ENAME, SAL
+FROM EMP
+WHERE SAL > ANY(SELECT SAL FROM EMP WHERE JOB = 'SALESMAN');
+
+SELECT EMPNO, ENAME, SAL
+FROM EMP
+WHERE SAL = ANY(SELECT SAL FROM EMP WHERE JOB = 'SALESMAN');
+
+-- ALL : 다중행으로 반환 되는 서브쿼리의 결과를 모두 만족해야 TURE임
+SELECT *
+FROM EMP
+WHERE SAL < ALL(SELECT SAL FROM EMP WHERE DEPTNO = 30);
+
+SELECT EMPNO, ENAME, SAL
+FROM EMP
+WHERE SAL > ALL(SELECT SAL FROM EMP WHERE JOB = 'MANAGER');
+
+SELECT *
+FROM EMP 
+WHERE EXISTS (SELECT DNAME FROM DEPT WHERE DEPTNO = 10);
+
+
+-- 다중열 서브쿼리 : 서브쿼리의 결과가 두 개 이상의 컬럼으로 반환되어  메인 쿼리에 전달
+SELECT EMPNO, ENAME, SAL, DEPTNO
+FROM EMP
+WHERE (DEPTNO, SAL) IN (SELECT DEPTNO, SAL FROM EMP
+									WHERE DEPTNO = 30);
+								
+SELECT * 
+FROM EMP
+WHERE (DEPTNO, SAL) IN (SELECT DEPTNO, MAX(SAL)
+									FROM EMP  GROUP BY DEPTNO);
+								
+
+-- FROM 절에서 사용하는 서브 쿼리 : 인라인뷰라고 부름
+-- 테이블 내에 데이터 규모가 너무 크거나 특정 열만 제공해야 하는 경우 사용
+SELECT E10.EMPNO, E10.ENAME, E10.DEPTNO, D.DNAME, D.LOC, E10.SAL
+FROM (SELECT EMPNO, ENAME, DEPTNO, SAL FROM EMP WHERE DEPTNO = 10) E10 JOIN DEPT D
+ON E10.DEPTNO = D.DEPTNO;
+
+
+-- SELECT절에 사용하는 서브쿼리 : 스칼라 서브쿼리라고 부름
+-- SELECT절에서 사용되는 서브쿼리는 반드시 하나의 결과만 반환 되어야 함
+SELECT EMPNO, ENAME, JOB, SAL, (SELECT GRADE FROM SALGRADE 
+												WHERE E.SAL BETWEEN LOSAL AND HISAL)  
+													AS "SALGRADE", DEPTNO,
+													(SELECT DNAME FROM DEPT D
+													WHERE E.DEPTNO = D.DEPTNO) AS "DNAME"
+FROM EMP e ;
+
+SELECT ENAME, DEPTNO, SAL, (SELECT TRUNC(AVG(SAL)) FROM EMP
+											WHERE DEPTNO = E.DEPTNO ) AS "부서별 급여 평균"
+FROM EMP E;
+
+SELECT EMPNO, ENAME,
+	CASE WHEN DEPTNO = (SELECT DEPTNO FROM DEPT WHERE LOC = 'NEW YORK')
+		THEN '본사'
+		ELSE  '분점'
+	END AS "소속"
+FROM EMP
+ORDER BY 소속 DESC;
+
+-- DECODE : 주어진 데이터 값이 조건 값과 일치하는 값을 출력하고 일치하지 않으면 기본값 출력
+SELECT EMPNO, ENAME, JOB, SAL,
+	DECODE(JOB,
+		'MANAGER', SAL * 1.1,
+		'SALESMAN', SAL * 1.05,
+		'ANALYST', SAL,
+		SAL * 1.03) AS "급여 인상"
+FROM EMP;
+
+
+-- CASE 문 :
+SELECT EMPNO, ENAME, JOB, SAL,
+CASE JOB
+WHEN 'MANAGER' THEN SAL * 1.1
+WHEN 'SALESMAN' THEN SAL * 1.05
+WHEN 'ANALYST' THEN SAL
+ELSE SAL *1.03
+END AS "급여 인상"
+FROM EMP;
+
+SELECT *
+FROM EMP;
+
+SELECT *
+FROM DEPT;
+
+SELECT *
+FROM SALGRADE;
+
+-- 연습문제 1 : 전체 사원 중 ALLEN과 같은 직책(JOB)인 사원들의 사원 정보,
+-- 부서 정보를 다음과 같이 출력하는 SQL문을 작성하세요.
+SELECT E.JOB, E.ENAME, E.SAL, D.DEPTNO, D.DNAME
+FROM EMP E JOIN DEPT D 
+ON E.DEPTNO = D.DEPTNO
+WHERE E.JOB = (SELECT JOB FROM EMP WHERE ENAME = 'ALLEN' );
+
+-- 연습문제 2 : 전체 사원의 평균 급여(SAL)보다 높은 급여를 받는 사원들의 사원 정보
+-- 부서 정보, 급여 등급 정보를 출력하는 SQL문을 작성하세요
+-- (단 출력할 때 급여가 많은 순으로 정렬하되 급여가 같은 경우에는 사원 번호를 기준으로 오름차순으로 정렬)
+SELECT E.EMPNO, E.ENAME, D.DNAME, TO_CHAR(E.HIREDATE, 'YY/MM/DD'), D.LOC, E.SAL,
+			(SELECT GRADE FROM SALGRADE WHERE E.SAL BETWEEN LOSAL AND HISAL ) AS GRADE
+FROM EMP E JOIN DEPT d ON E.DEPTNO = D.DEPTNO
+WHERE E.SAL > (SELECT AVG(SAL) FROM EMP)
+ORDER BY  SAL DESC, EMPNO;
+
+-- 연습문제 3 : 10번 부서에 근무하는 사원 중 30번 부서에는 존재하지 않는
+-- 직책을 가진 사원들의 사원 정보, 부서 정보를 다음과 같이 작성하는 출력하는 SQL문을 작성하세요.
+SELECT E.EMPNO, E.ENAME, E.JOB, E.DEPTNO, D.DNAME, D.LOC
+FROM EMP E JOIN DEPT D
+ON E.DEPTNO = D.DEPTNO
+WHERE D.DEPTNO = 10
+AND JOB NOT IN (SELECT JOB FROM EMP WHERE DEPTNO = '30');
+
+
+-- 연습문제 4 : 직책이 SALESMAN인 사람들의 최고 급여보다 높은 급여를 받는 사원들의 사원 정보,
+-- 급여 등급 정보를 다음과 같이 출력하는 SQL문을 작성하세요
+-- (단 서브쿼리를 활용할 떄 다중행 함수를 사용하는 방법과,
+-- 사용하지 않는 방법을 통해 사원 번호를 기준으로 오름차순으로 정렬)
+
+SELECT E.EMPNO, E.ENAME, E.SAL, S.GRADE
+  FROM EMP E, SALGRADE S
+ WHERE E.SAL BETWEEN S.LOSAL AND S.HISAL
+   AND SAL > (SELECT MAX(SAL)
+                FROM EMP
+               WHERE JOB = 'SALESMAN')
+ORDER BY E.EMPNO;
+
+SELECT E.EMPNO, E.ENAME, E.SAL, S.GRADE
+  FROM EMP E, SALGRADE S
+ WHERE E.SAL BETWEEN S.LOSAL AND S.HISAL
+   AND SAL > ALL (SELECT SAL
+                    FROM EMP
+                   WHERE JOB = 'SALESMAN')
+ORDER BY E.EMPNO;
+
+-- DML (Data Manipulation Language) : 조회(Select), 입력(Insert), 변경(Update)
+CREATE TABLE DEPT_TEMP
+AS SELECT * FROM DEPT;
+
+SELECT * FROM DEPT_TEMP;
+
+INSERT INTO DEPT_TEMP(DEPTNO, DNAME, LOC) VALUES(50, 'DATABASE', 'SEOUL' );
+
+INSERT INTO DEPT_TEMP VALUES(60, 'NETWORK', 'BUSAN');
+
+INSERT INTO DEPT_TEMP(DEPTNO, LOC) VALUES(70, 'SUWON');
+
+INSERT INTO DEPT_TEMP  VALUES(80, 'MOBILE'); -- ERROR
+
+CREATE TABLE EMP_TEMP
+AS SELECT * FROM EMP
+WHERE 1 != 1;
+
+SELECT *
+FROM EMP_TEMP;
+
+INSERT INTO EMP_TEMP  VALUES(9001, '나영석', 'PRESIDENT', NULL, '2010/01/01', 9900, 1000, 10);
+INSERT INTO EMP_TEMP  VALUES (9002, '이은지', 'MANAGER', 9999, '2020-04-05', 5500, 800, 20);
+
+DESC EMP_TEMP;
+
+SELECT INSERT INTO EMP_TEMP(EMPNO, ENAME, JOB, MGR, HIREDATE, SAL, COMM, DEPTNO)
+        SELECT E.EMPNO, E.ENAME, E.JOB, E.MGR, E.HIREDATE, E.SAL, E.COMM, E.DEPTNO
+        FROM EMP E, SALGRADE S
+        WHERE E.SAL BETWEEN S.LOSAL AND S.HISAL
+            AND S.GRADE = 1;
+           
+CREATE TABLE DEPT_TEMP2
+AS SELECT *
+FROM DEPT;
+
+SELECT *
+FROM DEPT_TEMP2;
+
+UPDATE DEPT_TEMP2
+	SET LOC = 'SUWON';
+
+UPDATE DEPT_TEMP2
+	SET LOC = '대전'
+WHERE DEPTNO = 40;
+
+DELETE FROM DEPT_TEMP2 WHERE LOC = 'SUWON';
+DELETE FROM DEPT_TEMP2;
+
+ROLLBACK;
+           
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-	
-	
 	
