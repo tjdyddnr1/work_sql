@@ -924,38 +924,57 @@ FROM EMP
 ORDER BY "총액";
 
 
--- 15. 10번 부서의 모든 사원에게 급여의 13%를 보너스로 지불하기로 하였다. 10번 부서 사원들의 이름, 급여, 보너스, 부서번호 출력
-
+-- 15. 10번 부서의 모든 사원에게 급여의 13%를 보너스로 지불하기로 하였다.
+-- 10번 부서 사원들의 이름, 급여, 보너스, 부서번호 출력
+SELECT ENAME, SAL, SAL*1.13,DEPTNO
+FROM EMP
+WHERE DEPTNO = '10';
 
 -- 16. 모든 사원에 대해 입사한 날로 부터 60일이 지난 후의 ‘월요일’에 대한 년,월,일를 구하여 이름, 입사일, 60일 후의 ‘월요일’ 날짜를 출력
-
+SELECT ENAME, TO_CHAR(HIREDATE, 'YY/MM/DD') "HIREDATE", TO_CHAR(NEXT_DAY(HIREDATE+60,'월요일'), 'YYYY/MM/DD')
+FROM EMP;
 
 -- 17. 이름의 글자수가 6자 이상인 사원의 이름을 앞에서 3자만 구하여 소문자로 이름만 출력
-
+SELECT LOWER(SUBSTR(ENAME, 1, 3))
+FROM EMP
+WHERE LENGTH(ENAME) >= 6;
 
 
 -- 18. 사원들의 사원 번호와 급여, 커미션, 연봉((comm+sal)*12)을 연봉이 많은 순서로 출력
-
+SELECT EMPNO, SAL, NVL2(COMM,COMM,0) AS "커미션", NVL2(COMM,(COMM+SAL)*12,SAL*12) AS "연봉"
+FROM EMP
+ORDER BY "연봉";
 
 
 -- 19. 모든 사원들의 입사한 년/월/일 (예, 1981년5월30일)
+SELECT TO_CHAR(HIREDATE, 'YYYY"년"MM"월"DD"일"')
+FROM EMP;
 
 
 
 -- 20. 10번 부서에 대해 급여의 평균 값, 최대 값, 최소 값, 인원 수를 출력
-
+SELECT AVG(SAL), MAX(SAL), MIN(SAL), COUNT(*)
+FROM EMP
+WHERE DEPTNO  = '10';
 
 
 -- 21. 사원번호가 짝수인 사원들의 모든 정보를 출력
-
+SELECT *
+FROM EMP
+WHERE MOD(EMPNO,2) = 0;
 
 
 -- 22. 각 부서별 같은 직무를 갖는 사원의 인원수를 구하여 부서 번호, 직무, 인원수 출력
-
+SELECT DEPTNO, JOB, COUNT(*)
+FROM EMP
+GROUP BY DEPTNO, JOB;
 
 
 -- 23. EMP와 DEPT테이블을 조인하여 모든 사원에 대해 부서 번호, 부서이름, 사원이름 급여를 출력
-
+SELECT E.DEPTNO, D.DNAME, E.ENAME, E.SAL
+FROM EMP E JOIN DEPT D 
+ON E.DEPTNO = D.DEPTNO
+ORDER BY E.DEPTNO;
 
 
 -- 24. 이름이 ‘ALLEN’인 사원의 부서 번호, 부서 이름, 사원 이름, 급여 출력
@@ -1208,7 +1227,3 @@ DELETE FROM DEPT_TEMP2;
 
 ROLLBACK;
            
-
-
-
-	
