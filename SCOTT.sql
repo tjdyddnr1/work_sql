@@ -1392,6 +1392,57 @@ DELETE FROM EMP_FK
 DELETE FROM DEPT_FK 
 	WHERE DEPTNO = 20;
 
+-- 데이터 사전이란? 데이터베이스 메모리 성능, 사용자, 권한, 객체 등
+-- 오라클 데이터베이스 운영에 필요한 중요한 데이터가 보관 되어 있음
+SELECT *
+FROM dict;
+
+-- 인덱스란? 데이터 검색 성능 향상을 위해 테이블 열에 사용하는 객체
+SELECT *
+FROM USER_INDEXES;
+
+CREATE INDEX IDX_EMP_SAL ON EMP(SAL);
+
+-- 테이블뷰 :  가상 테이블로 부르는 뷰는 하나 이상의 테이블을 조회하는 
+-- SELECT 문을 저장하는 객체
+-- 사용 목적 : 필요한 테이블만 제공하거나, 테이블의 특정 열을 숨기는 등의 보안 목적으로 사용할 수 있음. 
+CREATE VIEW VW_EMP20
+AS (SELECT EMPNO, ENAME, JOB, DEPTNO 
+	FROM EMP
+	WHERE DEPTNO = 20);
+
+SELECT *
+FROM VW_EMP20;
+
+-- 규칙에 따라 순번을 생성하는 시퀀스
+-- 시퀀스(Sequence)는 오라클 데이터베이스에서 특정 규칙에 맞는 연속 숫자를 생성하는 객체
+CREATE TABLE DEPT_SEQUENCE
+AS (SELECT * FROM DEPT WHERE 1 <> 1);
+
+SELECT *
+FROM DEPT_SEQUENCE;
+
+
+-- 시퀀스 테이블 만들기
+CREATE SEQUENCE SEQ_DEPT_SEQUENCE
+INCREMENT BY 10
+START WITH 10
+MAXVALUE 90
+MINVALUE 0
+NOCYCLE
+CACHE 2;
+
+SELECT *
+FROM USER_SEQUENCES;
+
+INSERT INTO DEPT_SEQUENCE VALUES(SEQ_DEPT_SEQUENCE.NEXTVAL, 'DATABASE', 'SEOUL');
+INSERT INTO DEPT_SEQUENCE VALUES(SEQ_DEPT_SEQUENCE.NEXTVAL, 'REACT', 'SUWON');
+
+SELECT *
+FROM DEPT_SEQUENCE;
+
+
+
 
 
 
