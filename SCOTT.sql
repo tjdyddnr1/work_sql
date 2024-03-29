@@ -978,30 +978,53 @@ ORDER BY E.DEPTNO;
 
 
 -- 24. 이름이 ‘ALLEN’인 사원의 부서 번호, 부서 이름, 사원 이름, 급여 출력
-
+SELECT E.DEPTNO, D.DNAME, E.ENAME, E.SAL
+FROM EMP E JOIN DEPT D
+ON E.DEPTNO = D.DEPTNO 
+WHERE ENAME = 'ALLEN';
 
 
 -- 25. ‘ALLEN’과 직무가 같은 사원의 이름, 부서 이름, 급여, 부서위치를 출력
-
+SELECT E.ENAME, D.DNAME, E.SAL, D.LOC
+FROM EMP E JOIN DEPT D
+ON E.DEPTNO = D.DEPTNO 
+WHERE E.JOB = (SELECT JOB FROM EMP  WHERE ENAME ='ALLEN');
 
 
 -- 26. 모든 사원들의 평균 급여 보다 많이 받는 사원들의 사원번호와 이름 출력
-
-
+SELECT EMPNO, ENAME
+FROM EMP
+WHERE SAL > (SELECT AVG(SAL) FROM EMP);
 
 -- 27. 부서별 평균 급여가 2000보다 적은 부서 사원들의 부서 번호 출력
+SELECT DEPTNO
+FROM EMP
+GROUP BY DEPTNO
+HAVING AVG(SAL) < 2000;
 
 
 -- 28. 30번 부서의 최고급여보다 급여가 많은 사원의 사원 번호, 이름, 급여를 출력
+SELECT EMPNO, JOB, SAL
+FROM EMP
+WHERE SAL > (SELECT MAX(SAL) FROM EMP WHERE DEPTNO = 30);
     
     
     
 -- 29. ‘FORD’와 부서가 같은 사원들의 이름, 부서 이름, 직무, 급여를 출력
+SELECT E.ENAME, D.DNAME, E.JOB, E.SAL
+FROM EMP E JOIN DEPT D
+ON E.DEPTNO = D.DEPTNO 
+WHERE D.DEPTNO = (SELECT DEPTNO FROM EMP WHERE ENAME = 'FORD');
     
-    
+
 -- 30. 부서 이름이 ‘SALES’인 사원들의 평균 급여 보다 많고,
 -- 부서 이름이 ‘RESEARCH’인 사원들의 평균 급여 보다 적은 사원들의 이름, 부서번호, 급여, 직무 출력
-
+SELECT ENAME, EMPNO, JOB
+FROM EMP
+WHERE SAL BETWEEN (SELECT AVG(SAL) FROM EMP E JOIN DEPT D ON E.DEPTNO = D.DEPTNO WHERE D.DNAME = 'SALES')
+								AND
+								(SELECT AVG(SAL) FROM EMP E JOIN DEPT D ON E.DEPTNO = D.DEPTNO WHERE D.DNAME = 'RESEARCH');
+							
 
 -- 서브쿼리 : 쿼리문 내에 포함 되는 쿼리문을 의미, 일반적으로 SELECT 문의 WHERE 절에서 사용
 -- 단일행 서브쿼리와 다중행 서브쿼리가 있음
@@ -1157,7 +1180,7 @@ AND JOB NOT IN (SELECT JOB FROM EMP WHERE DEPTNO = '30');
 
 -- 연습문제 4 : 직책이 SALESMAN인 사람들의 최고 급여보다 높은 급여를 받는 사원들의 사원 정보,
 -- 급여 등급 정보를 다음과 같이 출력하는 SQL문을 작성하세요
--- (단 서브쿼리를 활용할 떄 다중행 함수를 사용하는 방법과,
+-- (단 서브쿼리를 활용할 때 다중행 함수를 사용하는 방법과,
 -- 사용하지 않는 방법을 통해 사원 번호를 기준으로 오름차순으로 정렬)
 
 SELECT E.EMPNO, E.ENAME, E.SAL, S.GRADE
